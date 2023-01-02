@@ -1,0 +1,2 @@
+cd grammar
+antlr4 -Dlanguage=Python3 Layout.g4 -visitor
