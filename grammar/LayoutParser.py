@@ -37,13 +37,14 @@ class LayoutParser ( Parser ):
 
     sharedContextCache = PredictionContextCache()
 
-    literalNames = [ "<INVALID>", "'window'", "'{'", "'}'", "'grid'", "'--'" ]
+    literalNames = [ "<INVALID>", "'viewport'", "'{'", "'}'", "'grid'", 
+                     "'--'" ]
 
     symbolicNames = [ "<INVALID>", "<INVALID>", "<INVALID>", "<INVALID>", 
                       "<INVALID>", "<INVALID>", "DIMS", "COLOR3", "COLOR6", 
                       "WS" ]
 
-    RULE_win = 0
+    RULE_viewport = 0
     RULE_filler = 1
     RULE_grid = 2
     RULE_cell = 3
@@ -51,7 +52,7 @@ class LayoutParser ( Parser ):
     RULE_color = 5
     RULE_dims = 6
 
-    ruleNames =  [ "win", "filler", "grid", "cell", "separator", "color", 
+    ruleNames =  [ "viewport", "filler", "grid", "cell", "separator", "color", 
                    "dims" ]
 
     EOF = Token.EOF
@@ -74,7 +75,7 @@ class LayoutParser ( Parser ):
 
 
 
-    class WinContext(ParserRuleContext):
+    class ViewportContext(ParserRuleContext):
         __slots__ = 'parser'
 
         def __init__(self, parser, parent:ParserRuleContext=None, invokingState:int=-1):
@@ -86,29 +87,29 @@ class LayoutParser ( Parser ):
 
 
         def getRuleIndex(self):
-            return LayoutParser.RULE_win
+            return LayoutParser.RULE_viewport
 
         def enterRule(self, listener:ParseTreeListener):
-            if hasattr( listener, "enterWin" ):
-                listener.enterWin(self)
+            if hasattr( listener, "enterViewport" ):
+                listener.enterViewport(self)
 
         def exitRule(self, listener:ParseTreeListener):
-            if hasattr( listener, "exitWin" ):
-                listener.exitWin(self)
+            if hasattr( listener, "exitViewport" ):
+                listener.exitViewport(self)
 
         def accept(self, visitor:ParseTreeVisitor):
-            if hasattr( visitor, "visitWin" ):
-                return visitor.visitWin(self)
+            if hasattr( visitor, "visitViewport" ):
+                return visitor.visitViewport(self)
             else:
                 return visitor.visitChildren(self)
 
 
 
 
-    def win(self):
+    def viewport(self):
 
-        localctx = LayoutParser.WinContext(self, self._ctx, self.state)
-        self.enterRule(localctx, 0, self.RULE_win)
+        localctx = LayoutParser.ViewportContext(self, self._ctx, self.state)
+        self.enterRule(localctx, 0, self.RULE_viewport)
         try:
             self.enterOuterAlt(localctx, 1)
             self.state = 14

@@ -8,12 +8,12 @@ else:
 # This class defines a complete listener for a parse tree produced by LayoutParser.
 class LayoutListener(ParseTreeListener):
 
-    # Enter a parse tree produced by LayoutParser#win.
-    def enterWin(self, ctx:LayoutParser.WinContext):
+    # Enter a parse tree produced by LayoutParser#viewport.
+    def enterViewport(self, ctx:LayoutParser.ViewportContext):
         pass
 
-    # Exit a parse tree produced by LayoutParser#win.
-    def exitWin(self, ctx:LayoutParser.WinContext):
+    # Exit a parse tree produced by LayoutParser#viewport.
+    def exitViewport(self, ctx:LayoutParser.ViewportContext):
         pass
 
 

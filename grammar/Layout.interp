@@ -1,6 +1,6 @@
 token literal names:
 null
-'window'
+'viewport'
 '{'
 '}'
 'grid'
@@ -23,7 +23,7 @@ COLOR6
 WS
 
 rule names:
-win
+viewport
 filler
 grid
 cell

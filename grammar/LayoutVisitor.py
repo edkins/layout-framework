@@ -9,8 +9,8 @@ else:
 
 class LayoutVisitor(ParseTreeVisitor):
 
-    # Visit a parse tree produced by LayoutParser#win.
-    def visitWin(self, ctx:LayoutParser.WinContext):
+    # Visit a parse tree produced by LayoutParser#viewport.
+    def visitViewport(self, ctx:LayoutParser.ViewportContext):
         return self.visitChildren(ctx)
 
 

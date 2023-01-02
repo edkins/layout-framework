@@ -36,10 +36,14 @@ class HtmlBuilder:
 body {
     margin: 0;
 }
+.entire {
+    width: 100vw;
+    height: 100vh;
+}
 .grid {
     display: grid;
-    height: 100vh;
-    width: 100vw;
+    width: 100%;
+    height: 100%;
 }
 .cell {
 }
@@ -79,16 +83,23 @@ body {
         self._text.append('</html>\n')
         return ''.join(self._text)
 
-class Converter(LayoutListener):
+class GridContext:
     def __init__(self):
-        self.html = HtmlBuilder()
         self.x = 1
         self.y = 1
 
-    def enterWin(self, ctx):
-        self.html.push('body')
+class Converter(LayoutListener):
+    def __init__(self):
+        self.html = HtmlBuilder()
+        self.contexts = []
 
-    def exitWin(self, ctx):
+    def enterViewport(self, ctx):
+        self.html.push('body')
+        self.html.push('div')
+        self.html.set_class('entire')
+
+    def exitViewport(self, ctx):
+        self.html.pop('div')
         self.html.pop('body')
 
     def enterColor(self, ctx):
@@ -97,23 +108,25 @@ class Converter(LayoutListener):
     def enterGrid(self, ctx):
         self.html.push('div')
         self.html.set_class('grid')
+        self.contexts.append(GridContext())
 
     def exitGrid(self, ctx):
         self.html.pop('div')
+        self.contexts.pop()
 
     def enterCell(self, ctx):
         self.html.push('div')
         self.html.set_class('cell')
-        self.html.set_style('grid-column', str(self.x))
-        self.html.set_style('grid-row', str(self.y))
-        self.x += 1
+        self.html.set_style('grid-column', str(self.contexts[-1].x))
+        self.html.set_style('grid-row', str(self.contexts[-1].y))
+        self.contexts[-1].x += 1
 
     def exitCell(self, ctx):
         self.html.pop('div')
 
     def enterSeparator(self, ctx):
-        self.x = 1
-        self.y += 1
+        self.contexts[-1].x = 1
+        self.contexts[-1].y += 1
 
     def finish(self):
         return self.html.finish()
@@ -137,7 +150,7 @@ def main():
     parser = LayoutParser(stream)
     error_listener = MyErrorListener()
     parser.addErrorListener(error_listener)
-    tree = parser.win()
+    tree = parser.viewport()
     if error_listener.has_error:
         raise Exception()
     listener = Converter()

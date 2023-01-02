@@ -1,5 +1,5 @@
 grammar Layout;
-win: 'window' '{' filler '}';
+viewport: 'viewport' '{' filler '}';
 filler: grid
        | color
        ;
