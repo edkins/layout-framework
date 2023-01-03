@@ -11,10 +11,14 @@ color: COLOR3 | COLOR6;
 dims: DIMS;
 
 scroll: 'scroll' '{' big* '}';
-big: bounds;
+big: bounds | column;
 bounds: 'bounds' '{' bound* '}';
 bound: num num dims '{' filler '}';
 num: NUM;
+
+column: 'column' '{' paragraph* '}';
+paragraph: lorem;
+lorem: 'lorem' num;
 
 DIMS: [0-9]+[x][0-9]+;
 NUM: [-]?[0-9]+;

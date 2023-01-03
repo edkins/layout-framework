@@ -1,4 +1,6 @@
 import argparse
+import html
+import lorem
 from antlr4 import FileStream, CommonTokenStream, ParseTreeWalker
 from antlr4.error.ErrorListener import ErrorListener
 from grammar.LayoutLexer import LayoutLexer
@@ -89,6 +91,13 @@ body {
         self._text.append('</html>\n')
         return ''.join(self._text)
 
+    def insert_text(self, text):
+        if self._pending is not None:
+            self._text.append(self._pending.render(len(self._stack), False))
+            self._stack.append(self._pending.name)
+        self._pending = None
+        self._text.append(html.escape(text))
+
 class GridContext:
     def __init__(self):
         self.x = 1
@@ -151,6 +160,23 @@ class CellContext:
         pass
 
 
+class LoremContext:
+    def __init__(self):
+        self.n = None
+
+    def push_num(self, num):
+        if self.n == None:
+            self.n = num
+        else:
+            raise Exception("Too many numbers")
+
+    def push_text(self, html):
+        for text in lorem.get_paragraph(count = self.n).split('\n'):
+            html.push('p')
+            html.insert_text(text)
+            html.pop('p')
+
+
 class Converter(LayoutListener):
     def __init__(self):
         self.html = HtmlBuilder()
@@ -208,6 +234,14 @@ class Converter(LayoutListener):
 
     def exitBound(self, ctx):
         self.contexts.pop()
+
+    # Paragraphs
+
+    def enterLorem(self, ctx):
+        self.contexts.append(LoremContext())
+
+    def exitLorem(self, ctx):
+        self.contexts.pop().push_text(self.html)
 
     # Cells
 

@@ -116,5 +116,32 @@ class LayoutListener(ParseTreeListener):
         pass
 
 
+    # Enter a parse tree produced by LayoutParser#column.
+    def enterColumn(self, ctx:LayoutParser.ColumnContext):
+        pass
+
+    # Exit a parse tree produced by LayoutParser#column.
+    def exitColumn(self, ctx:LayoutParser.ColumnContext):
+        pass
+
+
+    # Enter a parse tree produced by LayoutParser#paragraph.
+    def enterParagraph(self, ctx:LayoutParser.ParagraphContext):
+        pass
+
+    # Exit a parse tree produced by LayoutParser#paragraph.
+    def exitParagraph(self, ctx:LayoutParser.ParagraphContext):
+        pass
+
+
+    # Enter a parse tree produced by LayoutParser#lorem.
+    def enterLorem(self, ctx:LayoutParser.LoremContext):
+        pass
+
+    # Exit a parse tree produced by LayoutParser#lorem.
+    def exitLorem(self, ctx:LayoutParser.LoremContext):
+        pass
+
+
 
 del LayoutParser

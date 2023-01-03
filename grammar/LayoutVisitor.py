@@ -69,5 +69,20 @@ class LayoutVisitor(ParseTreeVisitor):
         return self.visitChildren(ctx)
 
 
+    # Visit a parse tree produced by LayoutParser#column.
+    def visitColumn(self, ctx:LayoutParser.ColumnContext):
+        return self.visitChildren(ctx)
+
+
+    # Visit a parse tree produced by LayoutParser#paragraph.
+    def visitParagraph(self, ctx:LayoutParser.ParagraphContext):
+        return self.visitChildren(ctx)
+
+
+    # Visit a parse tree produced by LayoutParser#lorem.
+    def visitLorem(self, ctx:LayoutParser.LoremContext):
+        return self.visitChildren(ctx)
+
+
 
 del LayoutParser
