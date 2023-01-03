@@ -47,6 +47,12 @@ body {
 }
 .cell {
 }
+.bounds {
+    position: relative;
+}
+.bound {
+    position: absolute;
+}
 """)
         self._text.append('</style>\n</head>\n')
         self._stack = []
@@ -98,7 +104,7 @@ class ViewportContext:
         if not want_scroll:
             html.pop('div')
 
-class BoundsContext:
+class BoundContext:
     def __init__(self):
         self.x = None
         self.y = None
@@ -122,6 +128,7 @@ class BoundsContext:
 
     def push_divs(self, html, want_scroll):
         html.push('div')
+        html.set_class('bound')
         html.set_style('left', f'{self.x}px')
         html.set_style('top', f'{self.y}px')
         html.set_style('width', f'{self.w}px')
@@ -190,9 +197,16 @@ class Converter(LayoutListener):
     # Bigs
 
     def enterBounds(self, ctx):
-        self.contexts.append(BoundsContext())
+        self.html.push('div')
+        self.html.set_class('bounds')
 
     def exitBounds(self, ctx):
+        self.html.pop('div')
+
+    def enterBound(self, ctx):
+        self.contexts.append(BoundContext())
+
+    def exitBound(self, ctx):
         self.contexts.pop()
 
     # Cells

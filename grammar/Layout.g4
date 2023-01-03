@@ -12,7 +12,8 @@ dims: DIMS;
 
 scroll: 'scroll' '{' big* '}';
 big: bounds;
-bounds: 'bounds' num num dims '{' filler '}';
+bounds: 'bounds' '{' bound* '}';
+bound: num num dims '{' filler '}';
 num: NUM;
 
 DIMS: [0-9]+[x][0-9]+;

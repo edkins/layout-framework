@@ -59,6 +59,11 @@ class LayoutVisitor(ParseTreeVisitor):
         return self.visitChildren(ctx)
 
 
+    # Visit a parse tree produced by LayoutParser#bound.
+    def visitBound(self, ctx:LayoutParser.BoundContext):
+        return self.visitChildren(ctx)
+
+
     # Visit a parse tree produced by LayoutParser#num.
     def visitNum(self, ctx:LayoutParser.NumContext):
         return self.visitChildren(ctx)

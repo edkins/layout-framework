@@ -98,6 +98,15 @@ class LayoutListener(ParseTreeListener):
         pass
 
 
+    # Enter a parse tree produced by LayoutParser#bound.
+    def enterBound(self, ctx:LayoutParser.BoundContext):
+        pass
+
+    # Exit a parse tree produced by LayoutParser#bound.
+    def exitBound(self, ctx:LayoutParser.BoundContext):
+        pass
+
+
     # Enter a parse tree produced by LayoutParser#num.
     def enterNum(self, ctx:LayoutParser.NumContext):
         pass
