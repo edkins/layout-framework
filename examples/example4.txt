@@ -1,0 +1,6 @@
+viewport {
+  scroll {
+    bounds 0 0 2000x300 { #f00 }
+    bounds 0 0 300x2000 { #080 }
+  }
+}

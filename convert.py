@@ -88,31 +88,114 @@ class GridContext:
         self.x = 1
         self.y = 1
 
+class ViewportContext:
+    def push_divs(self, html, want_scroll):
+        if not want_scroll:
+            html.push('div')
+            html.set_class('entire')
+
+    def pop_divs(self, html, want_scroll):
+        if not want_scroll:
+            html.pop('div')
+
+class BoundsContext:
+    def __init__(self):
+        self.x = None
+        self.y = None
+        self.w = None
+        self.h = None
+
+    def push_num(self, num):
+        if self.x == None:
+            self.x = num
+        elif self.y == None:
+            self.y = num
+        else:
+            raise Exception("Too many numbers")
+
+    def push_dims(self, w, h):
+        if self.w == None:
+            self.w = w
+            self.h = h
+        else:
+            raise Exception("Already have dims")
+
+    def push_divs(self, html, want_scroll):
+        html.push('div')
+        html.set_style('left', f'{self.x}px')
+        html.set_style('top', f'{self.y}px')
+        html.set_style('width', f'{self.w}px')
+        html.set_style('height', f'{self.h}px')
+        if want_scroll:
+            html.set_style('overflow', 'scroll')
+
+    def pop_divs(self, html, want_scroll):
+        html.pop('div')
+
+class CellContext:
+    def push_divs(self, html, want_scroll):
+        html.set_style('overflow', 'scroll')
+
+    def pop_divs(self, html, want_scroll):
+        pass
+
+    def push_dims(self, w, h):
+        # TODO: implement cells bigger than 1x1
+        pass
+
+
 class Converter(LayoutListener):
     def __init__(self):
         self.html = HtmlBuilder()
         self.contexts = []
 
+    # Top level
+
     def enterViewport(self, ctx):
         self.html.push('body')
-        self.html.push('div')
-        self.html.set_class('entire')
+        self.contexts.append(ViewportContext())
 
     def exitViewport(self, ctx):
-        self.html.pop('div')
         self.html.pop('body')
 
+    def finish(self):
+        return self.html.finish()
+
+    # Fillers
+
     def enterColor(self, ctx):
+        self.contexts[-1].push_divs(self.html, False)
         self.html.set_style('background', ctx.getText())
 
+    def exitColor(self, ctx):
+        self.contexts[-1].pop_divs(self.html, False)
+
     def enterGrid(self, ctx):
+        self.contexts[-1].push_divs(self.html, False)
         self.html.push('div')
         self.html.set_class('grid')
         self.contexts.append(GridContext())
 
     def exitGrid(self, ctx):
-        self.html.pop('div')
         self.contexts.pop()
+        self.html.pop('div')
+        self.contexts[-1].pop_divs(self.html, False)
+
+    def enterScroll(self, ctx):
+        self.contexts[-1].push_divs(self.html, True)
+
+    def exitScroll(self, ctx):
+        self.contexts[-1].pop_divs(self.html, True)
+
+    # Bigs
+
+    def enterBounds(self, ctx):
+        self.contexts.append(BoundsContext())
+
+    def exitBounds(self, ctx):
+        self.contexts.pop()
+
+    # Cells
 
     def enterCell(self, ctx):
         self.html.push('div')
@@ -120,16 +203,25 @@ class Converter(LayoutListener):
         self.html.set_style('grid-column', str(self.contexts[-1].x))
         self.html.set_style('grid-row', str(self.contexts[-1].y))
         self.contexts[-1].x += 1
+        self.contexts.append(CellContext())
 
     def exitCell(self, ctx):
+        self.contexts.pop()
         self.html.pop('div')
 
     def enterSeparator(self, ctx):
         self.contexts[-1].x = 1
         self.contexts[-1].y += 1
 
-    def finish(self):
-        return self.html.finish()
+    # Values
+
+    def enterNum(self, ctx):
+        self.contexts[-1].push_num(int(ctx.getText()))
+
+    def enterDims(self, ctx):
+        w, h = ctx.getText().split('x')
+        self.contexts[-1].push_dims(int(w), int(h))
+
 
 class MyErrorListener(ErrorListener):
     def __init__(self):

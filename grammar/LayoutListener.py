@@ -71,5 +71,41 @@ class LayoutListener(ParseTreeListener):
         pass
 
 
+    # Enter a parse tree produced by LayoutParser#scroll.
+    def enterScroll(self, ctx:LayoutParser.ScrollContext):
+        pass
+
+    # Exit a parse tree produced by LayoutParser#scroll.
+    def exitScroll(self, ctx:LayoutParser.ScrollContext):
+        pass
+
+
+    # Enter a parse tree produced by LayoutParser#big.
+    def enterBig(self, ctx:LayoutParser.BigContext):
+        pass
+
+    # Exit a parse tree produced by LayoutParser#big.
+    def exitBig(self, ctx:LayoutParser.BigContext):
+        pass
+
+
+    # Enter a parse tree produced by LayoutParser#bounds.
+    def enterBounds(self, ctx:LayoutParser.BoundsContext):
+        pass
+
+    # Exit a parse tree produced by LayoutParser#bounds.
+    def exitBounds(self, ctx:LayoutParser.BoundsContext):
+        pass
+
+
+    # Enter a parse tree produced by LayoutParser#num.
+    def enterNum(self, ctx:LayoutParser.NumContext):
+        pass
+
+    # Exit a parse tree produced by LayoutParser#num.
+    def exitNum(self, ctx:LayoutParser.NumContext):
+        pass
+
+
 
 del LayoutParser
